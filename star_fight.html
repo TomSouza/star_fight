@@ -1,0 +1,124 @@
+<html>
+<head>
+    <title>Star Fight</title>
+    <link rel="stylesheet" href="engine/stylus/star.css" />
+    <script src="engine/life_source/spritesheet.js"></script>
+    <script src="engine/life_source/animate.js"></script>
+    <script src="engine/life_source/teclado.js"></script>
+    <script src="engine/sprites/bola.js"></script>
+    <script src="engine/sprites/explode.js"></script>
+    <script src="engine/sprites/heroi.js"></script>
+    
+
+</head>
+<body>
+
+	<div id="all">
+		
+		<h1>Star Fight</h1>
+
+		<div id="game">
+            <canvas id='star_canvas' width="300px" height="400px">
+            Seu navegador não suporta o Canvas do HTML5. <br>
+            Procure atualizá-lo.
+            
+            <script>
+            
+                /* Crindo Animação */
+                
+                // Referências para o Canvas
+                var canvas = document.getElementById('star_canvas');
+                var context = canvas.getContext('2d');
+                
+                // Criando alguns sprites
+                var b1 = new Bola(context);
+                b1.x = 100;
+                b1.y = 200;
+                b1.velocidadeX = 20;
+                b1.velocidadeY = -10;
+                b1.cor = 'red';
+                b1.raio = 20;
+                
+                var b2 = new Bola(context);
+                b2.x = 200;
+                b2.y = 100;
+                b2.velocidadeX = -10;
+                b2.velocidadeY = 20;
+                b2.cor = 'blue';
+                b2.raio = 30;
+                
+                var b3 = new Bola(context);
+                b3.x = 50;
+                b3.y = 300;
+                b3.velocidadeX = -5;
+                b3.velocidadeY = 5;
+                b3.cor = 'green';
+                b3.raio = 10;
+                
+                var expld = new Explode(context);
+                var imagemExpl = new Image();
+                imagemExpl.src = "engine/images/heal01.png";
+                expld.imagem = imagemExpl;
+                expld.imgSize = 150;
+                expld.imgPosX = 50;
+                expld.imgPosY = 100;
+                expld.frameSize = 192;
+                
+                // Criando o loop de animação
+                
+                //animacao.novoSprite(b1);
+                //animacao.novoSprite(b2);
+                //animacao.novoSprite(b3);
+                //animacao.novoSprite(expld);
+                
+                // "Ligar" a animação
+                //animacao.ligar();
+                
+                
+                /* Movimentando personagem */
+                
+                // Posição inicial do personagem
+
+                var teclado = new Teclado(document);
+                var animacao = new Animate(context);
+                var persImg = new Image();
+                persImg.src = "engine/images/darthvader.png";
+                
+                var personagem = new Heroi(context, teclado, animacao, persImg);
+                personagem.imgPosX = 0;
+                personagem.imgPosY = 150;
+                personagem.imgSizeX = 42;
+                personagem.imgSizeY = 58;
+                personagem.velocidade = 5;
+                
+                function select_char(src) {
+                    personagem.imagem.src = "engine/images/"+src+".png";
+                }
+
+                animacao.novoSprite(personagem);
+                
+                persImg.onload = function(){
+                    animacao.ligar();
+                }
+                
+                teclado.disparou(ESPACO, function() {
+                    personagem.atirar();
+                });
+
+            </script>
+            
+            </canvas>
+            
+            <div id="char_select"> 
+                <button onclick="select_char('BlackMage')" >Black Mage</button>
+                <button onclick="select_char('darthvader')" >Darth Vader</button>
+                <button onclick="select_char('Mage02')" >Mage aleatorio</button>
+            </div>
+            
+            <span id="x"></span>
+            <span id="y"></span>
+		</div>
+	</div>
+
+</body>
+</html>

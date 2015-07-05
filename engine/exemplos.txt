@@ -1,0 +1,158 @@
+<script>
+        window.onload = function() {
+            // Aqui trabalharemos com o Canvas
+            var canvas = document.getElementById('star_canvas');
+            var context = canvas.getContext('2d');
+            
+            context.strokeStyle = 'purple';
+            context.strokeRect(20, 20, 40, 40); // x, y - Posição Inicial | Altura | Largura
+            context.save();
+            
+            context.strokeStyle = 'blue';
+            context.strokeRect(50, 50, 100, 100);
+            
+            // Preenchimento Vermelho
+            context.fillStyle = 'red';
+            context.fillRect(60, 60, 100, 100);
+            context.restore();
+            
+            context.fillStyle = 'grey';
+            
+            context.beginPath();
+            context.arc(100, 80, 60, 90*Math.PI/180, 270*Math.PI/180, false); // x, y - Centro | Raio | Inicio - graus | Termino - graus | Sentido - True = Horario - False = Anti
+            
+            context.fill();
+            context.stroke();
+            
+            context.beginPath();
+            context.arc(200, 80, 60, 90*Math.PI/180, 270*Math.PI/180, true);
+            
+            context.fill();
+            context.stroke();
+            
+            context.beginPath();
+            context.arc(150, 160, 60, 0, 2*Math.PI);
+            
+            context.fill();
+            context.stroke();
+            
+            // Contorno azul, com espessura de 3px
+            context.lineWidth = 3;
+            context.strokeStyle = 'yellow';
+
+            // Estrela muito louca
+            context.beginPath();
+            
+            context.moveTo(75, 250); // Ponto inicial
+            context.lineTo(150, 50);
+            context.lineTo(225, 250);
+            context.lineTo(50, 120);
+            context.lineTo(250, 120);
+            context.lineTo(75, 250);
+            
+            context.lineWidth = '2px';
+            context.strokeStyle = 'blue';
+            
+            context.stroke();
+            
+            var imagem = new Image();
+            imagem.src = "engine/images/books.png";
+            imagem.onload = function() {
+                context.drawImage(imagem, 20, 300, 100, 100);
+            }
+            
+            var imagemExpl = new Image();
+            imagemExpl.src = "engine/images/fire8.png";
+            imagemExpl.onload = function() {
+                var frame = 192;
+                var x = 960; // Horizontal
+                var y = 960; // Vertical
+                context.drawImage(
+                    imagemExpl,
+                    frame*2 , frame*2, 192, 192, // Área de recorte (clipping)
+                    130, 250, 192, 192 // Desenho no Canvas
+                );
+            }
+            
+            // Dados da bola
+            var x = 100;
+            var y = 100;
+            var raio = 10;
+            var div = 0;
+            var velocidade = 50;
+            // Momento inicial
+            var anterior = new Date().getTime();
+            
+            var span_x = document.getElementById('x');
+            var span_y = document.getElementById('y');
+            var movimento = {first:true, second:false, third:false, fourth:false}
+            var fill = {azul: "blue", verm: "red", verde: "green", amar: "gold"}
+            
+            // Iniciar a animação
+            requestAnimationFrame(mexerBola);
+            
+                // Função de animação
+            function mexerBola() {
+                // Aqui uma bolinha se deslocará
+                // Limpar o Canvas
+                
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                
+                var agora = new Date().getTime();
+                var decorrido = agora - anterior;
+                
+                // Desenhar a bola
+                context.beginPath();
+                context.arc(x, y, raio, 0, Math.PI*2);
+                context.fill();
+                
+                if(movimento.third == true) { // Terceiro movimento - Esquerda
+                    if(y >= 150 && x > 100) {
+                        x -= velocidade * decorrido / 1000; 
+                    } else {
+                        movimento.third = false;
+                        movimento.fourth = true;
+                        context.fillStyle = fill.azul;
+                    }
+                    
+                } else if (movimento.second == true) { // Segundo Movimento - Baixo
+                    if(x >= 150 && y <= 150) {
+                        y += velocidade * decorrido / 1000;
+                    } else {
+                        movimento.second = false;
+                        movimento.third = true;
+                        context.fillStyle = fill.verm;
+                    }
+                    
+                } else if(movimento.fourth == true) { // Quarto Movimento - Cima
+                    if(y > 100) {
+                        y -= velocidade * decorrido / 1000;
+                    } else {
+                        movimento.fourth = false;
+                        movimento.first = true;
+                        context.fillStyle = fill.verde;
+                    }
+                    
+                } else if(movimento.first == true) { // Primeiro moviento - Direita
+                    if(x < 150) {
+                        x += velocidade * decorrido / 1000;
+                    } else {
+                        movimento.first = false;
+                        movimento.second = true;
+                        context.fillStyle = fill.amar;
+                    }
+                    
+                }
+                
+                span_x.innerHTML = "X: " + x;
+                span_y.innerHTML = "Y: " + y;
+                
+                div += 1;
+                anterior = agora;
+                // Chamar o próximo ciclo da animação
+                requestAnimationFrame(mexerBola);
+            
+            }
+            
+        }
+    </script>

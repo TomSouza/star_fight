@@ -1,0 +1,40 @@
+body, html {
+  width: 100%;
+  min-height:100%;
+  overflow-x: hidden;
+  margin:0;
+  padding: 0;
+  }
+  
+#all {
+  width: 85%;
+  margin: auto;
+  }
+  
+#game {
+  width: 40%;
+  border: 3px solid #b5b5b5;
+  padding: 4% 10%;
+  margin: auto;
+  position: relative;
+  }
+  
+#game canvas{
+  width: 400px;
+  height: 500px;
+  border: 3px solid #7675e6;
+  clear: both;
+  }
+
+#game span {
+  float: right;
+  position: absolute;
+}
+  
+#game #x {
+  
+  }
+
+#game #y {
+  top: 100px;
+  }
