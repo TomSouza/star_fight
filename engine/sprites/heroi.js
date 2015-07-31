@@ -116,17 +116,17 @@ Heroi.prototype = {
         var tiro = new Bola(this.context);
         tiro.x = this.imgPosX + 10;
         tiro.y = this.imgPosY + 10;
-        tiro.raio = 2;
+        tiro.raio = 4;
         tiro.cor = 'red';
         
         if (this.direcao == DIRECAO_ESQUERDA) {
-            tiro.velocidadeX = -20;
+            tiro.velocidadeX = -8;
         } else if(this.direcao == DIRECAO_DIREITA) {
-            tiro.velocidadeX = 20;
+            tiro.velocidadeX = 8;
         } else if(this.direcao == DIRECAO_CIMA) {
-            tiro.velocidadeY = -20;
+            tiro.velocidadeY = -8;
         } else if(this.direcao == DIRECAO_BAIXO) {
-            tiro.velocidadeY = 20;
+            tiro.velocidadeY = 8;
         }
         
         // Não tenho como incluir nada na animação!
