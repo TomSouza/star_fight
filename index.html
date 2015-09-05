@@ -81,23 +81,63 @@
 
                 var teclado = new Teclado(document);
                 var animacao = new Animate(context);
-                var persImg = new Image();
-                persImg.src = "engine/images/darthvader.png";
+                var imgBKmage = new Image();
+                var imgVader = new Image();
+                var imgMage = new Image();
+                imgBKmage.src = "engine/images/BlackMage.png";
+                imgVader.src = "engine/images/darthvader.png";
+                imgMage.src = "engine/images/Mage02.png";
+				
+				personagem = new Heroi();
                 
-                var personagem = new Heroi(context, teclado, animacao, persImg);
-                personagem.imgPosX = 0;
-                personagem.imgPosY = 150;
-                personagem.imgSizeX = 42;
-                personagem.imgSizeY = 58;
-                personagem.velocidade = 5;
+                var BlackMage = new Heroi(context, teclado, animacao, imgBKmage);
+                BlackMage.imgPosX = 0;
+                BlackMage.imgPosY = 150;
+                BlackMage.imgSizeX = 42;
+                BlackMage.imgSizeY = 58;
+                BlackMage.velocidade = 5;
+				
+				var darthvader = new Heroi(context, teclado, animacao, imgVader);
+                darthvader.imgPosX = 0;
+                darthvader.imgPosY = 150;
+                darthvader.imgSizeX = 42;
+                darthvader.imgSizeY = 58;
+                darthvader.velocidade = 5;
+				
+				var Mage02 = new Heroi(context, teclado, animacao, imgMage);
+                Mage02.imgPosX = 0;
+                Mage02.imgPosY = 150;
+                Mage02.imgSizeX = 42;
+                Mage02.imgSizeY = 58;
+                Mage02.velocidade = 5;
+				
+				// Init
+				personagem = BlackMage;
+				animacao.novoSprite(BlackMage);
                 
                 function select_char(src) {
-                    personagem.imagem.src = "engine/images/"+src+".png";
+                    switch(src){
+						case "BlackMage":
+							animacao.sprites = [];
+							animacao.novoSprite(BlackMage);
+							personagem = BlackMage;
+							break;
+						case "darthvader":
+							animacao.sprites = [];
+							animacao.novoSprite(darthvader);
+							personagem = darthvader;
+							break;
+						case "Mage02":
+							animacao.sprites = [];
+							animacao.novoSprite(Mage02);
+							personagem = Mage02;
+							break;
+						default:
+							// do nothing
+					}
                 }
 
-                animacao.novoSprite(personagem);
-                
-                persImg.onload = function(){
+                imgMage.onload = function(){
                     animacao.ligar();
                 }
                 
