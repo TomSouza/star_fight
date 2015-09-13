@@ -9,49 +9,51 @@ function Explode(context) {
     this.frameSize = 0;
     this.framePosX = 192;
     this.framePosY = 192;
+    
+    this.intervalo = 45;
 }
 
 Explode.prototype = {
     atualizar: function() {
-        var ctx = this.context;
         
         if(this.framePosY > 960) {
             this.framePosY = 0;
         }
-        
         if(this.framePosX > 960) {
             this.framePosX = 0;
             this.framePosY += 192;
         }
         
-        this.framePosX = this.framePosX + this.frameSize;
+        this.proximoQuadro();
 
     },
     
-    desenhar: function() {
-        var ctx = this.context;
+    proximoQuadro: function() {
+        // Momento atual
+        
+        var agora = new Date().getTime();
+        
+        // Se ainda n√£o tem √∫ltimo tempo medido
+        if (! this.ultimoTempo) {
+            this.ultimoTempo = agora;
+        }
+        var stop = agora - this.ultimoTempo;
+        // J√° √© hora de mudar de coluna?
+        if (stop < this.intervalo) {
+            return;
+        } else {
+            this.framePosX = this.framePosX + this.frameSize;
+        }
 
-        ctx.drawImage(
+        // Guardar hora da √∫ltima mudan√ßa
+        this.ultimoTempo = agora;
+    },
+    
+    desenhar: function() {
+        this.context.drawImage(
             this.imagem,
-            this.framePosX, this.framePosY, this.frameSize, this.frameSize, // ¡rea de recorte (clipping)
+            this.framePosX, this.framePosY, this.frameSize, this.frameSize, // ÔøΩrea de recorte (clipping)
             this.imgPosX, this.imgPosY, this.imgSize, this.imgSize // Desenho no Canvas
         );
-        
-        // var velocidade = 50;
-            // // Momento inicial
-            // var anterior = new Date().getTime();
-            
-            // var span_x = document.getElementById('x');
-            // var span_y = document.getElementById('y');
-            // var movimento = {first:true, second:false, third:false, fourth:false}
-            // var fill = {azul: "blue", verm: "red", verde: "green", amar: "gold"}
-            
-            // var agora = new Date().getTime();
-                // var decorrido = agora - anterior;
-
-                // anterior = agora;
-        
-        // Voltar ‡s configuraÁıes anteriores
-        
     }
 }
