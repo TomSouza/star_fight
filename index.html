@@ -2,13 +2,14 @@
 <head>
     <title>Star Fight</title>
     <link rel="stylesheet" href="engine/stylus/star.css" />
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="engine/life_source/colisor.js"></script>
     <script src="engine/life_source/spritesheet.js"></script>
     <script src="engine/life_source/animate.js"></script>
     <script src="engine/life_source/teclado.js"></script>
     <script src="engine/sprites/bola.js"></script>
     <script src="engine/sprites/explode.js"></script>
     <script src="engine/sprites/heroi.js"></script>
-    
 
 </head>
 <body>
@@ -18,34 +19,37 @@
 		<h1>Star Fight</h1>
 
 		<div id="game">
-            <canvas id='star_canvas' width="300px" height="400px">
-            Seu navegador não suporta o Canvas do HTML5. <br>
-            Procure atualizá-lo.
+            <canvas id='star_canvas' width="400px" height="400px">
+            Seu navegador nÃ£o suporta o Canvas do HTML5. <br>
+            Procure atualizÃ¡-lo.
             
             <script>
+                $(document).ready(function(){
             
-                /* Crindo Animação */
+                /* Crindo AnimaÃ§Ã£o */
                 
-                // Referências para o Canvas
+                // ReferÃªncias para o Canvas
                 var canvas = document.getElementById('star_canvas');
                 var context = canvas.getContext('2d');
+                var colisor = new Colisor();
+                var animacao = new Animate(context);
                 
                 // Criando alguns sprites
                 var b1 = new Bola(context);
-                b1.x = 100;
+                b1.x = 50;
                 b1.y = 200;
-                b1.velocidadeX = 20;
-                b1.velocidadeY = -10;
+                b1.velocidadeX = 3;
+                b1.velocidadeY = -5;
                 b1.cor = 'red';
-                b1.raio = 20;
+                b1.raio = 15;
                 
                 var b2 = new Bola(context);
                 b2.x = 200;
                 b2.y = 100;
-                b2.velocidadeX = -10;
-                b2.velocidadeY = 20;
+                b2.velocidadeX = -5;
+                b2.velocidadeY = 5;
                 b2.cor = 'blue';
-                b2.raio = 30;
+                b2.raio = 10;
                 
                 var b3 = new Bola(context);
                 b3.x = 50;
@@ -57,106 +61,84 @@
                 
                 var expld = new Explode(context);
                 var imagemExpl = new Image();
-                imagemExpl.src = "engine/images/heal01.png";
+                imagemExpl.src = "engine/images/Fire8.png";
                 expld.imagem = imagemExpl;
                 expld.imgSize = 150;
                 expld.imgPosX = 50;
                 expld.imgPosY = 100;
                 expld.frameSize = 192;
                 
-                // Criando o loop de animação
+                // Criando o loop de animaÃ§Ã£o
                 
-                //animacao.novoSprite(b1);
-                //animacao.novoSprite(b2);
+                animacao.novoSprite(b1);
+                animacao.novoSprite(b2);
                 //animacao.novoSprite(b3);
                 //animacao.novoSprite(expld);
                 
-                // "Ligar" a animação
-                //animacao.ligar();
-                
-                
+                colisor.novoSprite(b1);
+                colisor.novoSprite(b2);
+
+                animacao.colisor = colisor;
+                animacao.ligar();
+
                 /* Movimentando personagem */
                 
-                // Posição inicial do personagem
+                // PosiÃ§Ã£o inicial do personagem
 
                 var teclado = new Teclado(document);
-                var animacao = new Animate(context);
-                var imgBKmage = new Image();
-                var imgVader = new Image();
-                var imgMage = new Image();
-                imgBKmage.src = "engine/images/BlackMage.png";
-                imgVader.src = "engine/images/darthvader.png";
-                imgMage.src = "engine/images/Mage02.png";
-				
-				personagem = new Heroi();
-                
-                var BlackMage = new Heroi(context, teclado, animacao, imgBKmage);
-                BlackMage.imgPosX = 0;
-                BlackMage.imgPosY = 150;
-                BlackMage.imgSizeX = 42;
-                BlackMage.imgSizeY = 58;
-                BlackMage.velocidade = 5;
-				
-				var darthvader = new Heroi(context, teclado, animacao, imgVader);
-                darthvader.imgPosX = 0;
-                darthvader.imgPosY = 150;
-                darthvader.imgSizeX = 42;
-                darthvader.imgSizeY = 58;
-                darthvader.velocidade = 5;
-				
-				var Mage02 = new Heroi(context, teclado, animacao, imgMage);
-                Mage02.imgPosX = 0;
-                Mage02.imgPosY = 150;
-                Mage02.imgSizeX = 42;
-                Mage02.imgSizeY = 58;
-                Mage02.velocidade = 5;
-				
-				// Init
-				personagem = BlackMage;
-				animacao.novoSprite(BlackMage);
-                
-                function select_char(src) {
-                    switch(src){
-						case "BlackMage":
-							animacao.sprites = [];
-							animacao.novoSprite(BlackMage);
-							personagem = BlackMage;
-							break;
-						case "darthvader":
-							animacao.sprites = [];
-							animacao.novoSprite(darthvader);
-							personagem = darthvader;
-							break;
-						case "Mage02":
-							animacao.sprites = [];
-							animacao.novoSprite(Mage02);
-							personagem = Mage02;
-							break;
-						default:
-							// do nothing
-					}
-                }
+                var img = new Image();
 
-                imgMage.onload = function(){
-                    animacao.ligar();
+                img.src = "engine/images/BlackMage.png";
+
+                var personagem = new Heroi(context, teclado, animacao, img);
+                personagem.imgPosX = 0;
+                personagem.imgPosY = 150;
+                personagem.imgSizeX = 42;
+                personagem.imgSizeY = 58;
+                personagem.velocidade = 2.5;
+
+				// Init
+				animacao.novoSprite(personagem);
+
+                img.onload = function(){
+                    //if(!animacao.ligado) animacao.ligar();
                 }
                 
                 teclado.disparou(ESPACO, function() {
                     personagem.atirar();
                 });
 
+                $("#char_input input").click(function(){
+                    img.src = $(this).val();
+                    personagem.sheet.update_img(img);
+                    $("#char_input input").blur();
+                });
+                    
+            });
             </script>
             
             </canvas>
             
-            <div id="char_select"> 
-                <button onclick="select_char('BlackMage')" >Black Mage</button>
-                <button onclick="select_char('darthvader')" >Darth Vader</button>
-                <button onclick="select_char('Mage02')" >Mage aleatorio</button>
+            <div id="side_menu">
+                <span id="x"></span>
+                <span id="y"></span>
+                
+                <div id="char_select"> 
+                    <h4>Mude seu personagem: </h4>
+                    <form id="char_input">
+                      <input type="radio" name="char" value="engine/images/BlackMage.png">Black Mage
+                      <br>
+                      <input type="radio" name="char" value="engine/images/darthvader.png">Darth Vader
+                      <br>
+                      <input type="radio" name="char" value="engine/images/Mage02.png">Mage Away
+                    </form>
+                </div>
+                
+                <h4>Setas de Comandos:</h4>
+                Direcionais: Suas respectivas direcoes <br>
+                Espaco: Atira
+                
             </div>
-            
-            <span id="x"></span>
-            <span id="y"></span>
 		</div>
 	</div>
 

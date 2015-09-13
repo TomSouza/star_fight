@@ -20,7 +20,7 @@ function Heroi(context, teclado, animacao, imagem) {
     
     // Criando a spritesheet a partir da imagem recebida
     this.sheet = new SpriteSheet(this.context, this.imagem, 4, 4);
-    this.sheet.intervalo = 150;
+    this.sheet.intervalo = 180;
     
     this.andando = false;
     this.direcao = DIRECAO_DIREITA;
@@ -129,7 +129,7 @@ Heroi.prototype = {
             tiro.velocidadeY = 8;
         }
         
-        // Não tenho como incluir nada na animação!
+        // NÃ£o tenho como incluir nada na animaÃ§Ã£o!
         this.animacao.novoSprite(tiro);
         
     }

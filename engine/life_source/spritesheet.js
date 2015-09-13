@@ -14,12 +14,12 @@ SpriteSheet.prototype = {
         // Momento atual
         var agora = new Date().getTime();
         
-        // Se ainda não tem último tempo medido
+        // Se ainda nÃ£o tem Ãºltimo tempo medido
         if (! this.ultimoTempo) {
             this.ultimoTempo = agora;
         }
         
-        // Já é hora de mudar de coluna?
+        // JÃ¡ Ã© hora de mudar de coluna?
         if (agora - this.ultimoTempo < this.intervalo) {
             return;
         }
@@ -30,7 +30,7 @@ SpriteSheet.prototype = {
             this.linha = 0;
         }
         
-        // Guardar hora da última mudança
+        // Guardar hora da Ãºltima mudanÃ§a
         this.ultimoTempo = agora;
     },
     
@@ -44,9 +44,13 @@ SpriteSheet.prototype = {
         
         this.context.drawImage(
             this.imagem,
-            framePosX, framePosY, frameSizeX, frameSizeY, // Área de recorte (clipping)
+            framePosX, framePosY, frameSizeX, frameSizeY, // Ã¡rea de recorte (clipping)
             x, y, imgSizeX, imgSizeY // Desenho no Canvas
         );
         
+    },
+    
+    update_img: function(imagem) {
+        this.imagem = imagem;
     }
 }

@@ -1,6 +1,7 @@
 function Animate(context) {
     this.sprites = [];
     this.context = context;
+    this.colisor = undefined;
     this.ligado = false;
 }
 
@@ -32,6 +33,7 @@ Animate.prototype = {
         
         for(var i in this.sprites) {
             this.sprites[i].desenhar();
+            this.colisor.processar();
         }
         
         var animate = this;
