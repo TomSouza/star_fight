@@ -3,11 +3,12 @@ var DIRECAO_DIREITA = 2;
 var DIRECAO_CIMA = 3;
 var DIRECAO_BAIXO = 4;
 
-function Heroi(context, teclado, animacao, imagem) {
+function Heroi(context, teclado, animacao, imagem, colisor) {
     this.context = context;
     this.teclado = teclado;
     this.animacao = animacao;
     this.imagem = imagem;
+    this.colisor = colisor;
 
     // Desenhar
     this.imgPosX = 0;
@@ -118,6 +119,7 @@ Heroi.prototype = {
         tiro.y = this.imgPosY + 10;
         tiro.raio = 4;
         tiro.cor = 'red';
+        tiro.ident = 'tiro';
         
         if (this.direcao == DIRECAO_ESQUERDA) {
             tiro.velocidadeX = -8;
@@ -131,6 +133,26 @@ Heroi.prototype = {
         
         // Não tenho como incluir nada na animação!
         this.animacao.novoSprite(tiro);
+        this.colisor.novoSprite(tiro);
         
+    },
+    
+    retangulosColisao: function() {
+        return [{ 
+            x: this.x - this.raio, // this.x é o centro da bola
+            y: this.y - this.raio, // this.y idem
+            largura: this.raio * 2,
+            altura: this.raio * 2
+        }];
+    },
+    
+    colidiuCom: function(sprite) {
+        if(this.cor == "red") {
+            this.velocidadeY *= -1;
+            this.velocidadeX *= -1;
+            
+            this.x += this.velocidadeX+1;
+            this.y += this.velocidadeY-1;
+        }
     }
 }

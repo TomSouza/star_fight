@@ -10,6 +10,7 @@ function Bola(context) {
     // Atributos de desenho padrão
     this.cor = 'black';
     this.raio = 10;
+    this.ident = '';
 }
 
 Bola.prototype = {
@@ -56,12 +57,18 @@ Bola.prototype = {
     },
     
     colidiuCom: function(sprite) {
-        if(this.cor == "red") {
-            this.velocidadeY *= -1;
-            this.velocidadeX *= -1;
+        if(this.ident == 'tiro') {
             
-            this.x += this.velocidadeX+1;
-            this.y += this.velocidadeY-1;
+        } else {
+            if (this.x < sprite.x) // Estou na esquerda
+            this.velocidadeX = -Math.abs(this.velocidadeX); // -
+            else
+                this.velocidadeX = Math.abs(this.velocidadeX); // +
+            
+            if (this.y < sprite.y) // Estou acima
+                this.velocidadeY = -Math.abs(this.velocidadeY); // -
+            else
+                this.velocidadeY = Math.abs(this.velocidadeY); // +
         }
     }
 }
