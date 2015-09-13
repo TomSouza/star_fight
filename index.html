@@ -1,6 +1,15 @@
 <html>
 <head>
     <title>Star Fight</title>
+    <!-- Linjs externos -->
+    <!-- Bootstrap 4 -->
+    <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js"></script>
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    
     <link rel="stylesheet" href="engine/stylus/star.css" />
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="engine/life_source/colisor.js"></script>
@@ -16,7 +25,7 @@
 
 	<div id="all">
 		
-		<h1>Star Fight</h1>
+		<h1 style="color: #fff;" >Star Fight</h1>
 
 		<div id="game">
             <canvas id='star_canvas' width="400px" height="400px">
@@ -42,6 +51,7 @@
                 b1.velocidadeY = -5;
                 b1.cor = 'red';
                 b1.raio = 15;
+                b1.ident = 'b1';
                 
                 var b2 = new Bola(context);
                 b2.x = 200;
@@ -50,6 +60,7 @@
                 b2.velocidadeY = 5;
                 b2.cor = 'blue';
                 b2.raio = 10;
+                b2.ident = 'b2';
                 
                 var b3 = new Bola(context);
                 b3.x = 50;
@@ -58,6 +69,7 @@
                 b3.velocidadeY = 5;
                 b3.cor = 'green';
                 b3.raio = 10;
+                b3.ident = 'b3';
                 
                 var expld = new Explode(context);
                 var imagemExpl = new Image();
@@ -72,14 +84,18 @@
                 
                 animacao.novoSprite(b1);
                 animacao.novoSprite(b2);
-                //animacao.novoSprite(b3);
+                animacao.novoSprite(b3);
                 //animacao.novoSprite(expld);
                 
                 colisor.novoSprite(b1);
                 colisor.novoSprite(b2);
+                colisor.novoSprite(b3);
 
                 animacao.colisor = colisor;
-                animacao.ligar();
+                colisor.aoColidir = function(s1, s2) {
+                    //alert('PÁ');
+                };
+                //animacao.ligar();
 
                 /* Movimentando personagem */
                 
@@ -90,7 +106,7 @@
 
                 img.src = "engine/images/BlackMage.png";
 
-                var personagem = new Heroi(context, teclado, animacao, img);
+                var personagem = new Heroi(context, teclado, animacao, img, colisor);
                 personagem.imgPosX = 0;
                 personagem.imgPosY = 150;
                 personagem.imgSizeX = 42;
@@ -101,7 +117,10 @@
 				animacao.novoSprite(personagem);
 
                 img.onload = function(){
-                    //if(!animacao.ligado) animacao.ligar();
+                    if(!animacao.ligado) {
+                        animacao.colisor = colisor;
+                        animacao.ligar();
+                    }
                 }
                 
                 teclado.disparou(ESPACO, function() {
@@ -124,7 +143,7 @@
                 <span id="y"></span>
                 
                 <div id="char_select"> 
-                    <h4>Mude seu personagem: </h4>
+                    <h5>Mude seu personagem: </h5>
                     <form id="char_input">
                       <input type="radio" name="char" value="engine/images/BlackMage.png">Black Mage
                       <br>
@@ -134,7 +153,7 @@
                     </form>
                 </div>
                 
-                <h4>Setas de Comandos:</h4>
+                <h5>Setas de Comandos:</h5>
                 Direcionais: Suas respectivas direcoes <br>
                 Espaco: Atira
                 
