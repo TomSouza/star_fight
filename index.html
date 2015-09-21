@@ -52,33 +52,35 @@
                 b1.cor = 'red';
                 b1.raio = 15;
                 b1.ident = 'b1';
+                b1.bounce = true;
                 
                 var b2 = new Bola(context);
                 b2.x = 200;
                 b2.y = 100;
                 b2.velocidadeX = -5;
-                b2.velocidadeY = 5;
+                b2.velocidadeY = 0;
                 b2.cor = 'blue';
                 b2.raio = 10;
                 b2.ident = 'b2';
+                b2.bounce = true;
                 
                 var b3 = new Bola(context);
                 b3.x = 50;
                 b3.y = 300;
-                b3.velocidadeX = -5;
+                b3.velocidadeX = 0;
                 b3.velocidadeY = 5;
                 b3.cor = 'green';
                 b3.raio = 10;
                 b3.ident = 'b3';
+                b3.bounce = true;
                 
                 var expld = new Explode(context);
                 var imagemExpl = new Image();
                 imagemExpl.src = "engine/images/Fire8.png";
                 expld.imagem = imagemExpl;
-                expld.imgSize = 150;
-                expld.imgPosX = 50;
-                expld.imgPosY = 100;
+                expld.imgSize = 80;
                 expld.frameSize = 192;
+                expld.ident = "explode";
                 
                 // Criando o loop de animação
                 
@@ -92,9 +94,15 @@
                 colisor.novoSprite(b3);
 
                 animacao.colisor = colisor;
-                colisor.aoColidir = function(s1, s2) {
-                    //alert('PÁ');
-                };
+                
+                b1.animacao = animacao;
+                b2.animacao = animacao;
+                b3.animacao = animacao;
+                // --- //
+                b1.colisor = colisor;
+                b2.colisor = colisor;
+                b3.colisor = colisor;
+
                 //animacao.ligar();
 
                 /* Movimentando personagem */
@@ -112,6 +120,10 @@
                 personagem.imgSizeX = 42;
                 personagem.imgSizeY = 58;
                 personagem.velocidade = 2.5;
+                personagem.ident = 'person';
+                
+                colisor.novoSprite(personagem);
+                personagem.colisor = colisor;
 
 				// Init
 				animacao.novoSprite(personagem);
@@ -124,7 +136,7 @@
                 }
                 
                 teclado.disparou(ESPACO, function() {
-                    personagem.atirar();
+                    personagem.atirar(expld);
                 });
 
                 $("#char_input input").click(function(){
@@ -145,7 +157,7 @@
                 <div id="char_select"> 
                     <h5>Mude seu personagem: </h5>
                     <form id="char_input">
-                      <input type="radio" name="char" value="engine/images/BlackMage.png">Black Mage
+                      <input type="radio" name="char" value="engine/images/BlackMage.png" checked>Black Mage
                       <br>
                       <input type="radio" name="char" value="engine/images/darthvader.png">Darth Vader
                       <br>

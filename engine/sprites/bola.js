@@ -1,23 +1,33 @@
-function Bola(context) {
+function Bola(context, efeito) {
     
     this.context = context;
     this.x = 0;
     this.y = 0;
     this.velocidadeX = 0;
     this.velocidadeY = 0;
-    this.bounce = true;
+    this.bounce = false;
     
     // Atributos de desenho padrão
     this.cor = 'black';
     this.raio = 10;
     this.ident = '';
+    this.efeito = efeito;
 }
 
 Bola.prototype = {
     atualizar: function() {
         var ctx = this.context;
+        var atual_obj = null;
         
-        if(this.bounce) {
+        if (this.ident == 'tiro' && ((this.x < this.raio || this.x > ctx.canvas.width - this.raio) || (this.y < this.raio || this.y > ctx.canvas.height - this.raio))) {
+            for(var i in this.animacao.sprites) {
+                atual_obj = this.animacao.sprites[i];
+                if((atual_obj.x < atual_obj.raio || atual_obj.x > ctx.canvas.width - atual_obj.raio) || (atual_obj.y < atual_obj.raio || atual_obj.y > ctx.canvas.height - atual_obj.raio) && atual_obj.ident == 'tiro') {
+                    this.animacao.sprites.splice(i, 1);
+                    this.colisor.sprites.splice(i, 1);
+                }
+            }
+        }else if(this.bounce) {
             
             if (this.x < this.raio || this.x > ctx.canvas.width - this.raio) {
                 this.velocidadeX *= -1;
@@ -30,6 +40,7 @@ Bola.prototype = {
         
         this.x += this.velocidadeX;
         this.y += this.velocidadeY;
+       
     },
     
     desenhar: function() {
@@ -57,18 +68,38 @@ Bola.prototype = {
     },
     
     colidiuCom: function(sprite) {
-        if(this.ident == 'tiro') {
+        
+        if(this.ident == 'tiro' && sprite.ident != "person") {
             
-        } else {
+            for(var i in this.animacao.sprites) {
+                if(this.animacao.sprites[i].ident == "explode"){
+                    this.animacao.sprites.splice(i, 1);
+                    this.efeito.explodiu = false;
+                }
+            }
+            
+            if(this.efeito.explodiu == false) {
+                this.efeito.imgPosX = sprite.x;
+                this.efeito.imgPosY = sprite.y;
+                this.animacao.novoSprite(this.efeito);
+            }
+            
+            for(var i in this.animacao.sprites) {
+                if(this.animacao.sprites[i].ident == 'tiro'){
+                    this.colisor.sprites.splice(i, 1);
+                    this.animacao.sprites.splice(i, 1);
+                }
+            }
+            
             if (this.x < sprite.x) // Estou na esquerda
-            this.velocidadeX = -Math.abs(this.velocidadeX); // -
+                this.velocidadeX = -Math.abs(this.velocidadeX); // -
             else
-                this.velocidadeX = Math.abs(this.velocidadeX); // +
+                this.velocidadeX = this.velocidadeX *= -1; // +
             
             if (this.y < sprite.y) // Estou acima
                 this.velocidadeY = -Math.abs(this.velocidadeY); // -
             else
-                this.velocidadeY = Math.abs(this.velocidadeY); // +
+                this.velocidadeY = Math.abs(this.velocidadeY); // + 
         }
     }
 }
