@@ -4,6 +4,9 @@ function SpriteSheet(context, imagem, linhas, colunas) {
     this.numLinhas = linhas;
     this.numColunas = colunas;
     
+    this.frameSizeX = 0;
+    this.frameSizeY = 0;
+    
     this.intervalo = 0;
     
     this.linha = 0;
@@ -36,15 +39,15 @@ SpriteSheet.prototype = {
     
     desenhar: function(x, y, imgSizeX, imgSizeY) {
         
-        var frameSizeX = this.imagem.width / this.numLinhas;
-        var frameSizeY = this.imagem.height / this.numColunas;
+        this.frameSizeX = this.imagem.width / this.numLinhas;
+        this.frameSizeY = this.imagem.height / this.numColunas;
         
-        var framePosX = frameSizeX * this.linha;
-        var framePosY = frameSizeY * this.coluna;
+        var framePosX = this.frameSizeX * this.linha;
+        var framePosY = this.frameSizeY * this.coluna;
         
         this.context.drawImage(
             this.imagem,
-            framePosX, framePosY, frameSizeX, frameSizeY, // área de recorte (clipping)
+            framePosX, framePosY, this.frameSizeX, this.frameSizeY, // área de recorte (clipping)
             x, y, imgSizeX, imgSizeY // Desenho no Canvas
         );
         

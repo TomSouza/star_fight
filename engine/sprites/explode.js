@@ -10,7 +10,9 @@ function Explode(context) {
     this.framePosX = 192;
     this.framePosY = 192;
     
-    this.intervalo = 45;
+    this.intervalo = 40;
+    this.explodiu = false;
+    this.ident = "";
 }
 
 Explode.prototype = {
@@ -18,13 +20,15 @@ Explode.prototype = {
         
         if(this.framePosY > 960) {
             this.framePosY = 0;
+            this.explodiu = true;
         }
         if(this.framePosX > 960) {
             this.framePosX = 0;
             this.framePosY += 192;
         }
         
-        this.proximoQuadro();
+        if(!this.explodiu)
+            this.proximoQuadro();
 
     },
     

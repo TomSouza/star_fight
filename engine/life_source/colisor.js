@@ -1,6 +1,5 @@
 function Colisor() {
     this.sprites = [];
-    this.aoColidir = null;
 }
 Colisor.prototype = {
     novoSprite: function(sprite) {
@@ -42,8 +41,6 @@ Colisor.prototype = {
                 if (this.retangulosColidem(rets1[i], rets2[j])) {
                     sprite1.colidiuCom(sprite2);
                     sprite2.colidiuCom(sprite1);
-                    
-                    if (this.aoColidir) this.aoColidir(sprite1, sprite2);
 
                     break colisoes;
                 }

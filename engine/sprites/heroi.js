@@ -22,6 +22,7 @@ function Heroi(context, teclado, animacao, imagem, colisor) {
     // Criando a spritesheet a partir da imagem recebida
     this.sheet = new SpriteSheet(this.context, this.imagem, 4, 4);
     this.sheet.intervalo = 180;
+    this.ident = '';
     
     this.andando = false;
     this.direcao = DIRECAO_DIREITA;
@@ -113,14 +114,14 @@ Heroi.prototype = {
         this.sheet.desenhar(this.imgPosX, this.imgPosY, this.imgSizeX, this.imgSizeY);
     },
     
-    atirar: function() {
-        var tiro = new Bola(this.context);
-        tiro.x = this.imgPosX + 10;
-        tiro.y = this.imgPosY + 10;
+    atirar: function(expld) {
+        var tiro = new Bola(this.context, expld);
+        tiro.x = this.imgPosX + 15;
+        tiro.y = this.imgPosY + 20;
         tiro.raio = 4;
-        tiro.cor = 'red';
+        tiro.cor = 'purple';
         tiro.ident = 'tiro';
-        
+
         if (this.direcao == DIRECAO_ESQUERDA) {
             tiro.velocidadeX = -8;
         } else if(this.direcao == DIRECAO_DIREITA) {
@@ -130,29 +131,37 @@ Heroi.prototype = {
         } else if(this.direcao == DIRECAO_BAIXO) {
             tiro.velocidadeY = 8;
         }
-        
+
         // Não tenho como incluir nada na animação!
         this.animacao.novoSprite(tiro);
         this.colisor.novoSprite(tiro);
-        
+        tiro.animacao = this.animacao;
+        tiro.colisor = this.colisor;
     },
     
     retangulosColisao: function() {
         return [{ 
-            x: this.x - this.raio, // this.x é o centro da bola
-            y: this.y - this.raio, // this.y idem
-            largura: this.raio * 2,
-            altura: this.raio * 2
+            x: this.imgPosX,
+            y: this.imgPosY,
+            largura: this.sheet.frameSizeX - 3,
+            altura: this.sheet.frameSizeY - 3
         }];
     },
     
     colidiuCom: function(sprite) {
-        if(this.cor == "red") {
-            this.velocidadeY *= -1;
-            this.velocidadeX *= -1;
+    
+        if(sprite.ident != "tiro") {
+            if(sprite.x < this.imgPosX) { //Objeto colisor vem da esquerda pra direita ( Bola )
+            sprite.velocidadeX = -Math.abs(sprite.velocidadeX); // +
+            } else { //Objeto colisor vem da direita pra esquerda ( Bola )
+                sprite.velocidadeX = Math.abs(sprite.velocidadeX); // +
+            }
             
-            this.x += this.velocidadeX+1;
-            this.y += this.velocidadeY-1;
+            if(sprite.y < this.imgPosY) { //Objeto colisor vem de baixo pra cima ( Bola )
+                sprite.velocidadeY = -Math.abs(sprite.velocidadeY); // -
+            } else { //Objeto colisor vem de cima pra baixo ( Bola )
+                sprite.velocidadeY = Math.abs(sprite.velocidadeY); // +
+            }
         }
     }
 }
