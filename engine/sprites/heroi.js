@@ -3,7 +3,7 @@ var DIRECAO_DIREITA = 2;
 var DIRECAO_CIMA = 3;
 var DIRECAO_BAIXO = 4;
 
-function Heroi(context, teclado, animacao, imagem, colisor) {
+export function Heroi(context, teclado, animacao, imagem, colisor) {
     this.context = context;
     this.teclado = teclado;
     this.animacao = animacao;

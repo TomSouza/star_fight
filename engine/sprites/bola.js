@@ -1,4 +1,4 @@
-function Bola(context, efeito) {
+export function Bola(context, efeito) {
     
     this.context = context;
     this.x = 0;

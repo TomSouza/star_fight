@@ -1,4 +1,4 @@
-function Animate(context) {
+export function Animate(context) {
     this.sprites = [];
     this.context = context;
     this.colisor = undefined;

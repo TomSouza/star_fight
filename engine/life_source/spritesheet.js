@@ -1,4 +1,4 @@
-function SpriteSheet(context, imagem, linhas, colunas) {
+export function SpriteSheet(context, imagem, linhas, colunas) {
     this.context = context;
     this.imagem = imagem;
     this.numLinhas = linhas;
