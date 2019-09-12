@@ -1,68 +1,75 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="pt-BR">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <title>Star Fight</title>
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    
+
     <link rel="stylesheet" href="engine/stylus/star.css" />
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 
-    <script type="module" src="engine/life_source/colisor.js"></script>
-    <script type="module" src="engine/life_source/spritesheet.js"></script>
-    <script type="module" src="engine/life_source/animate.js"></script>
-    <script type="module" src="engine/life_source/teclado.js"></script>
-    <script type="module" src="engine/sprites/bola.js"></script>
-    <script type="module" src="engine/sprites/explode.js"></script>
-    <script type="module" src="engine/sprites/heroi.js"></script>
+    <script type="module" src="./engine/life_source/colisor.js"></script>
+    <script type="module" src="./engine/life_source/spritesheet.js"></script>
+    <script type="module" src="./engine/life_source/animate.js"></script>
+    <script type="module" src="./engine/life_source/teclado.js"></script>
+    <script type="module" src="./engine/sprites/bola.js"></script>
+    <script type="module" src="./engine/sprites/explode.js"></script>
+    <script type="module" src="./engine/sprites/heroi.js"></script>
 
     <script type="module" src="engine/main.js"></script>
+  </head>
+  <body>
+    <div id="all">
+      <h1 style="color: #fff;">Star Fight</h1>
 
-</head>
-<body>
+      <div id="game">
+        <canvas id="star_canvas" width="400px" height="400px">
+          Seu navegador não suporta o Canvas do HTML5. <br />
+          Procure atualizá-lo.
 
-	<div id="all">
-		
-		<h1 style="color: #fff;" >Star Fight</h1>
+          <script type="module">
+            import { Engine } from "./engine/main.js";
 
-		<div id="game">
-            <canvas id='star_canvas' width="400px" height="400px">
-            Seu navegador não suporta o Canvas do HTML5. <br>
-            Procure atualizá-lo.
-            
-            <script type="module">
-                import {Engine} from './engine/main.js';
+            $(document).ready(function() {
+              new Engine("star_canvas", "2d").run();
+            });
+          </script>
+        </canvas>
 
-                $(document).ready(function() {
-                    new Engine('star_canvas', '2D').run();
-                });
-            </script>
-            
-            </canvas>
-            
-            <div id="side_menu">
-                <span id="x"></span>
-                <span id="y"></span>
-                
-                <div id="char_select"> 
-                    <h5>Mude seu personagem: </h5>
-                    <form id="char_input">
-                      <input type="radio" name="char" value="engine/images/BlackMage.png" checked>Black Mage
-                      <br>
-                      <input type="radio" name="char" value="engine/images/darthvader.png">Darth Vader
-                      <br>
-                      <input type="radio" name="char" value="engine/images/Mage02.png">Mage Away
-                    </form>
-                </div>
-                
-                <h5>Setas de Comandos:</h5>
-                Direcionais: Suas respectivas direcoes <br>
-                Espaco: Atira
-                
-            </div>
-		</div>
-	</div>
+        <div id="side_menu">
+          <span id="x"></span>
+          <span id="y"></span>
 
-</body>
+          <div id="char_select">
+            <h5>Mude seu personagem:</h5>
+            <form id="char_input">
+              <input
+                type="radio"
+                name="char"
+                value="engine/images/BlackMage.png"
+                checked
+              />Black Mage
+              <br />
+              <input
+                type="radio"
+                name="char"
+                value="engine/images/darthvader.png"
+              />Darth Vader
+              <br />
+              <input
+                type="radio"
+                name="char"
+                value="engine/images/Mage02.png"
+              />Mage Away
+            </form>
+          </div>
+
+          <h5>Setas de Comandos:</h5>
+          Direcionais: Suas respectivas direcoes <br />
+          Espaco: Atira
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
