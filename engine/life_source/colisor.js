@@ -1,6 +1,7 @@
-function Colisor() {
+export function Colisor() {
     this.sprites = [];
 }
+
 Colisor.prototype = {
     novoSprite: function(sprite) {
         this.sprites.push(sprite);

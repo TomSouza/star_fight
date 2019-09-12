@@ -4,7 +4,7 @@ var SETA_CIMA     = 38;
 var SETA_BAIXO    = 40;
 var ESPACO        = 32;
 
-function Teclado(elemento) {
+export function Teclado(elemento) {
     this.elemento = elemento;
     this.pressionadas = [];
     this.disparadas = [];

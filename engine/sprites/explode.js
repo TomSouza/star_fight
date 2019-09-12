@@ -1,4 +1,4 @@
-function Explode(context) {
+export function Explode(context) {
     
     this.context = context;
     this.imagem = "";
