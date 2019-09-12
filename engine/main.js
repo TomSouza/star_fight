@@ -11,11 +11,13 @@ export class Engine {
     this.context = this.canvas.getContext(_context);
     this.colisor = new Colisor();
     this.animacao = new Animate(this.context);
+
+    this.minhasbolas = [];
   }
 
   run() {
     // Criando alguns sprites
-    var b1 = new Bola(this.context);
+    /*var b1 = new Bola(this.context);
     b1.x = 50;
     b1.y = 200;
     b1.velocidadeX = 3;
@@ -23,7 +25,23 @@ export class Engine {
     b1.cor = "red";
     b1.raio = 15;
     b1.ident = "b1";
-    b1.bounce = true;
+    b1.bounce = true;*/
+    
+    this.canvas.onmousemove = (event) => {
+        var rect = this.canvas.getBoundingClientRect();
+        var yeah = new Bola(this.context);
+        yeah.lifetime = 101;
+        yeah.x = event.clientX - rect.left;
+        yeah.y = event.clientY - rect.top;
+        yeah.cor = `rgb(
+            ${Math.random() * (255 - 0) + 0},
+            ${Math.random() * (255 - 0) + 0},
+            0
+        )`;
+
+        //this.minhasbolas.push(yeah);
+        this.animacao.novoSprite(yeah);
+    }
 
     var b2 = new Bola(this.context);
     b2.x = 200;
@@ -35,7 +53,7 @@ export class Engine {
     b2.ident = "b2";
     b2.bounce = true;
 
-    var b3 = new Bola(this.context);
+    /*var b3 = new Bola(this.context);
     b3.x = 50;
     b3.y = 300;
     b3.velocidadeX = 0;
@@ -43,11 +61,11 @@ export class Engine {
     b3.cor = "green";
     b3.raio = 10;
     b3.ident = "b3";
-    b3.bounce = true;
+    b3.bounce = true;*/
 
     var expld = new Explode(this.context);
     var imagemExpl = new Image();
-    imagemExpl.src = "engine/images/Fire8.png";
+    imagemExpl.src = "engine/images/heal01.png";
     expld.imagem = imagemExpl;
     expld.imgSize = 80;
     expld.frameSize = 192;
@@ -55,24 +73,24 @@ export class Engine {
 
     // Criando o loop de animação
 
-    this.animacao.novoSprite(b1);
+    //this.animacao.novoSprite(b1);
     this.animacao.novoSprite(b2);
-    this.animacao.novoSprite(b3);
+    //this.animacao.novoSprite(b3);
     //this.animacao.novoSprite(expld);
 
-    this.colisor.novoSprite(b1);
+    //this.colisor.novoSprite(b1);
     this.colisor.novoSprite(b2);
-    this.colisor.novoSprite(b3);
+    //this.colisor.novoSprite(b3);
 
     this.animacao.colisor = this.colisor;
 
-    b1.animacao = this.animacao;
+    //b1.animacao = this.animacao;
     b2.animacao = this.animacao;
-    b3.animacao = this.animacao;
+    //b3.animacao = this.animacao;
     // --- //
-    b1.colisor = this.colisor;
+    //b1.colisor = this.colisor;
     b2.colisor = this.colisor;
-    b3.colisor = this.colisor;
+    //b3.colisor = this.colisor;
 
     //animacao.ligar();
 

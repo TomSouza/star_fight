@@ -6,19 +6,28 @@ export function Bola(context, efeito) {
     this.velocidadeX = 0;
     this.velocidadeY = 0;
     this.bounce = false;
+    this.reduction = 300;
+    this.reductor = 0;
+    this.reduce = false;
     
     // Atributos de desenho padrão
     this.cor = 'black';
     this.raio = 10;
     this.ident = '';
     this.efeito = efeito;
+    this.lifetime = 0;
 }
 
 Bola.prototype = {
     atualizar: function() {
+
+        if (this.lifetime > 0) {
+            this.lifetime -= 2;
+        }
+
         var ctx = this.context;
         var atual_obj = null;
-        
+
         if (this.ident == 'tiro' && ((this.x < this.raio || this.x > ctx.canvas.width - this.raio) || (this.y < this.raio || this.y > ctx.canvas.height - this.raio))) {
             for(var i in this.animacao.sprites) {
                 atual_obj = this.animacao.sprites[i];
@@ -37,10 +46,9 @@ Bola.prototype = {
                 this.velocidadeY *= -1;
             }
         }
-        
+
         this.x += this.velocidadeX;
         this.y += this.velocidadeY;
-       
     },
     
     desenhar: function() {

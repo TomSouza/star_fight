@@ -1,4 +1,5 @@
 import { SpriteSheet } from "../life_source/spritesheet.js";
+import { Bola } from "./bola.js";
 
 var DIRECAO_ESQUERDA = 1;
 var DIRECAO_DIREITA = 2;

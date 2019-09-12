@@ -31,6 +31,11 @@ Animate.prototype = {
     }
 
     for (var i in this.sprites) {
+
+      if (this.sprites[i].lifetime < 0) {
+        continue;
+      }
+
       this.sprites[i].desenhar();
       this.colisor.processar();
     }
