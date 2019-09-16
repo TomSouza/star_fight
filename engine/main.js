@@ -5,17 +5,78 @@ import { Explode } from "./sprites/explode.js";
 import { Heroi } from "./sprites/heroi.js";
 import { Bola } from "./sprites/bola.js";
 
-export class Engine {
-  constructor(_element, _context) {
-    this.canvas = document.getElementById(_element);
-    this.context = this.canvas.getContext(_context);
-    this.colisor = new Colisor();
-    this.animacao = new Animate(this.context);
+var currentType;
 
-    this.minhasbolas = [];
-  }
+export class Engine {
+	constructor(_element, _context) {
+		this.canvas = document.getElementById(_element);
+		this.context = this.canvas.getContext(_context);
+		this.colisor = new Colisor();
+		this.animacao = new Animate(this.context);
+
+		this.minhasbolas = [];
+	}
+
+	createSphere(){
+		var rect = this.canvas.getBoundingClientRect();
+		       
+		var center_X = event.clientX - rect.left;
+		var center_Y = event.clientY - rect.top;
+
+		var radius = 20;
+
+		var angInc = 2*Math.PI/20;
+
+		for(var i = 0; i < 2 * Math.PI; i += angInc){
+			var bolinhaInSpace = new Bola(this.context);
+		    bolinhaInSpace.lifetime = 101;
+		    bolinhaInSpace.raio = 5;
+		    bolinhaInSpace.cor = `rgb(
+		    	${Math.random() * (255 - 0) + 0},
+		        ${Math.random() * (255 - 0) + 0},
+		        0
+		    )`;
+		    bolinhaInSpace.x = center_X + (radius * Math.cos( i ));
+		    bolinhaInSpace.y = center_Y + (radius * Math.sin( i ));
+		    this.animacao.novoSprite(bolinhaInSpace);
+		}
+	}
+
+	createSpiral(){
+		var rect = this.canvas.getBoundingClientRect();
+		       
+		var center_X = event.clientX - rect.left;
+		var center_Y = event.clientY - rect.top;
+
+		var spiralRadius = 0;
+		var sphereRadius = 0.5;
+		var angInc = 2*Math.PI/20;
+
+		var qtnCircles = 5;
+		for(var loop = 0; loop < qtnCircles; loop++){
+			for(var i = 0; i < 2 * Math.PI; i += angInc){
+				var bolinhaInSpace = new Bola(this.context);
+			    bolinhaInSpace.lifetime = 101;
+			    bolinhaInSpace.raio = sphereRadius;
+			    bolinhaInSpace.cor = `rgb(
+			    	${Math.random() * (255 - 0) + 0},
+			        ${Math.random() * (255 - 0) + 0},
+			        0
+			    )`;
+			    bolinhaInSpace.x = center_X + (spiralRadius * Math.cos( i ));
+			    bolinhaInSpace.y = center_Y + (spiralRadius * Math.sin( i ));
+			    
+			    this.animacao.novoSprite(bolinhaInSpace);
+			    sphereRadius += 0.05;
+			    
+			}
+			spiralRadius += 20;
+		}
+		
+	}
 
   run() {
+    
     // Criando alguns sprites
     /*var b1 = new Bola(this.context);
     b1.x = 50;
@@ -26,6 +87,7 @@ export class Engine {
     b1.raio = 15;
     b1.ident = "b1";
     b1.bounce = true;*/
+    
     
     this.canvas.onmousemove = (event) => {
         var rect = this.canvas.getBoundingClientRect();
@@ -40,8 +102,18 @@ export class Engine {
         )`;
 
         //this.minhasbolas.push(yeah);
-        this.animacao.novoSprite(yeah);
+        if(currentType == "mouseMovement")
+ 	       this.animacao.novoSprite(yeah);
     }
+
+    this.canvas.onclick = (event) => {
+    	if(currentType == "circulo")
+    		this.createSphere();
+    	if(currentType == "espiral")
+    		this.createSpiral();
+    }
+
+    
 
     var b2 = new Bola(this.context);
     b2.x = 200;
@@ -139,5 +211,11 @@ export class Engine {
       personagem.sheet.update_img(img);
       $("#char_input input").blur();
     });
+
+    $("#particle_input input").click(function() {
+      currentType = $(this).val();
+      //personagem.sheet.update_img(img);
+    });
+
   }
 }
