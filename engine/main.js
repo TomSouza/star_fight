@@ -16,6 +16,9 @@ export class Engine {
   }
 
   run() {
+    
+    
+    
     // Criando alguns sprites
     /*var b1 = new Bola(this.context);
     b1.x = 50;
@@ -41,6 +44,32 @@ export class Engine {
 
         //this.minhasbolas.push(yeah);
         this.animacao.novoSprite(yeah);
+    }
+
+    this.canvas.onclick = (event) => {
+
+        var rect = this.canvas.getBoundingClientRect();
+        
+        var center_X = event.clientX - rect.left;
+        var center_Y = event.clientY - rect.top;
+
+        var radius = 20;
+
+        var angInc = 2*Math.PI/20;
+
+        for(var i = 0; i < 2 * Math.PI; i += angInc){
+            var bolinhaInSpace = new Bola(this.context);
+            bolinhaInSpace.lifetime = 101;
+            bolinhaInSpace.raio = 5;
+            bolinhaInSpace.cor = `rgb(
+                ${Math.random() * (255 - 0) + 0},
+                ${Math.random() * (255 - 0) + 0},
+                0
+            )`;
+            bolinhaInSpace.x = center_X + (radius * Math.cos( i ));
+            bolinhaInSpace.y = center_Y + (radius * Math.sin( i ));
+            this.animacao.novoSprite(bolinhaInSpace);
+        }
     }
 
     var b2 = new Bola(this.context);
@@ -139,5 +168,11 @@ export class Engine {
       personagem.sheet.update_img(img);
       $("#char_input input").blur();
     });
+
+    $("#particle_input input").click(function() {
+      img.src = $(this).val();
+      //personagem.sheet.update_img(img);
+    });
+
   }
 }
