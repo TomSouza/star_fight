@@ -103,8 +103,8 @@ export class Engine {
         if (currentForm == "esfera") {
           sphereRadius += 0.05;
         } else {
-          sqrHeight += 0.5;
-          sqrWidth += 0.5;
+          sqrHeight += 0.08;
+          sqrWidth += 0.08;
         }
 
         timer += 2;

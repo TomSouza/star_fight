@@ -17,7 +17,7 @@ export function Quadrado(context, efeito) {
   this.largura = 10;
   this.ident = "";
   this.efeito = efeito;
-  this.lifetime = 0;
+  this.lifetime = -1;
 }
 
 Quadrado.prototype = {
@@ -38,7 +38,7 @@ Quadrado.prototype = {
 
   atualizar: function() {
     if (this.lifetime > 0) {
-      this.lifetime -= 2;
+      this.lifetime -= 1;
     }
 
     var ctx = this.context;
