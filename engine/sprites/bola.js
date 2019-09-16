@@ -16,7 +16,7 @@ export function Bola(context, efeito) {
   this.raio = 10;
   this.ident = "";
   this.efeito = efeito;
-  this.lifetime = 0;
+  this.lifetime = -1;
 }
 
 Bola.prototype = {
@@ -37,7 +37,7 @@ Bola.prototype = {
 
   atualizar: function() {
     if (this.lifetime > 0) {
-      this.lifetime -= 2;
+      this.lifetime -= 1;
     }
 
     var ctx = this.context;
