@@ -4,8 +4,10 @@ import { Animate } from "./life_source/animate.js";
 import { Explode } from "./sprites/explode.js";
 import { Heroi } from "./sprites/heroi.js";
 import { Bola } from "./sprites/bola.js";
+import { Quadrado } from "./sprites/quadrado.js";
 
 var currentType;
+var currentForm;
 
 export class Engine {
 	constructor(_element, _context) {
@@ -15,6 +17,34 @@ export class Engine {
 		this.animacao = new Animate(this.context);
 
 		this.minhasbolas = [];
+
+		currentType = "circulo";
+		currentForm = "esfera";
+	}
+
+	drawCircle(raio){
+		var form = new Bola(this.context);
+		form.lifetime = 101;
+		form.raio = raio;
+		form.cor = `rgb(
+		   	${Math.random() * (255 - 0) + 0},
+			${Math.random() * (255 - 0) + 0},
+		    0
+		)`;
+		return form;
+	}
+
+	drawSquare(altura, largura){
+		var form = new Quadrado(this.context);
+		form.lifetime = 101;
+		form.altura = altura;
+		form.largura = largura;
+		form.cor = `rgb(
+		   	${Math.random() * (255 - 0) + 0},
+			${Math.random() * (255 - 0) + 0},
+		    0
+		)`;
+		return form;
 	}
 
 	createSphere(){
@@ -25,20 +55,18 @@ export class Engine {
 
 		var radius = 20;
 
-		var angInc = 2*Math.PI/20;
+		var angInc = 2 * Math.PI/20;
+
+		var formInSpace;
 
 		for(var i = 0; i < 2 * Math.PI; i += angInc){
-			var bolinhaInSpace = new Bola(this.context);
-		    bolinhaInSpace.lifetime = 101;
-		    bolinhaInSpace.raio = 5;
-		    bolinhaInSpace.cor = `rgb(
-		    	${Math.random() * (255 - 0) + 0},
-		        ${Math.random() * (255 - 0) + 0},
-		        0
-		    )`;
-		    bolinhaInSpace.x = center_X + (radius * Math.cos( i ));
-		    bolinhaInSpace.y = center_Y + (radius * Math.sin( i ));
-		    this.animacao.novoSprite(bolinhaInSpace);
+			if( currentForm == "esfera")
+				formInSpace = this.drawCircle(5);
+			else
+				formInSpace = this.drawSquare(5,5);
+		    formInSpace.x = center_X + (radius * Math.cos( i ));
+		    formInSpace.y = center_Y + (radius * Math.sin( i ));
+		    this.animacao.novoSprite(formInSpace);
 		}
 	}
 
@@ -50,70 +78,103 @@ export class Engine {
 
 		var spiralRadius = 0;
 		var sphereRadius = 0.5;
-		var angInc = 2*Math.PI/20;
+		var sqrWidth = 0.5;
+		var sqrHeight = 0.5;
+
+		var angInc = 2 * Math.PI/20;
 
 		var qtnCircles = 5;
+		var formInSpace;
+		
 		for(var loop = 0; loop < qtnCircles; loop++){
+			var timer = 5;
 			for(var i = 0; i < 2 * Math.PI; i += angInc){
-				var bolinhaInSpace = new Bola(this.context);
-			    bolinhaInSpace.lifetime = 101;
-			    bolinhaInSpace.raio = sphereRadius;
-			    bolinhaInSpace.cor = `rgb(
-			    	${Math.random() * (255 - 0) + 0},
-			        ${Math.random() * (255 - 0) + 0},
-			        0
-			    )`;
-			    bolinhaInSpace.x = center_X + (spiralRadius * Math.cos( i ));
-			    bolinhaInSpace.y = center_Y + (spiralRadius * Math.sin( i ));
+				if( currentForm == "esfera")
+					formInSpace = this.drawCircle(sphereRadius);
+				else
+					formInSpace = this.drawSquare(sqrWidth,sqrHeight);
+			    formInSpace.lifetime = 101 + ((timer*2) );
 			    
-			    this.animacao.novoSprite(bolinhaInSpace);
-			    sphereRadius += 0.05;
+			    formInSpace.x = center_X + (spiralRadius * Math.cos( i ));
+			    formInSpace.y = center_Y + (spiralRadius * Math.sin( i ));
 			    
+			    this.animacao.novoSprite(formInSpace);
+			    if( currentForm == "esfera")
+					sphereRadius += 0.25;
+				else{
+					sqrHeight += 0.5;
+					sqrWidth += 0.5;
+				}
+					
+			    timer += 5;
+				
 			}
 			spiralRadius += 20;
 		}
+	}
+
+	createSnow(){
+		var rect = this.canvas.getBoundingClientRect();
+		       
+		var center_X = event.clientX - rect.left;
+		var center_Y = event.clientY - rect.top;
+
+		var spiralRadius = 0;
+		var sphereRadius = 5;
+		var sqrWidth = 5;
+		var sqrHeight = 5;
+
+		var angInc = 2*Math.PI/20;
+
+		var timer = 5;
+
+		var formInSpace;
+		if( currentForm == "esfera")
+			formInSpace = this.drawCircle(sphereRadius);
+		else
+			formInSpace = this.drawSquare(sqrWidth, sqrHeight);
+		formInSpace.lifetime = 101 + ((timer*2) );
+		
+		formInSpace.x = center_X ;
+		formInSpace.y = center_Y;
+		    
+		formInSpace.velocidadeX = (formInSpace.x/100);
+		formInSpace.velocidadeY = (formInSpace.y/100);
+
+		this.animacao.novoSprite(formInSpace);
 		
 	}
 
+	
+
   run() {
-    
-    // Criando alguns sprites
-    /*var b1 = new Bola(this.context);
-    b1.x = 50;
-    b1.y = 200;
-    b1.velocidadeX = 3;
-    b1.velocidadeY = -5;
-    b1.cor = "red";
-    b1.raio = 15;
-    b1.ident = "b1";
-    b1.bounce = true;*/
     
     
     this.canvas.onmousemove = (event) => {
         var rect = this.canvas.getBoundingClientRect();
-        var yeah = new Bola(this.context);
-        yeah.lifetime = 101;
-        yeah.x = event.clientX - rect.left;
-        yeah.y = event.clientY - rect.top;
-        yeah.cor = `rgb(
+        var trail = new Bola(this.context);
+        trail.lifetime = 101;
+        trail.x = event.clientX - rect.left;
+        trail.y = event.clientY - rect.top;
+        trail.cor = `rgb(
             ${Math.random() * (255 - 0) + 0},
             ${Math.random() * (255 - 0) + 0},
             0
         )`;
 
-        //this.minhasbolas.push(yeah);
         if(currentType == "mouseMovement")
- 	       this.animacao.novoSprite(yeah);
+ 	       this.animacao.novoSprite(trail);
     }
 
     this.canvas.onclick = (event) => {
+    	console.log(currentType);
     	if(currentType == "circulo")
     		this.createSphere();
     	if(currentType == "espiral")
     		this.createSpiral();
+    	if(currentType == "neve")
+    		this.createSnow();
     }
-
-    
 
     var b2 = new Bola(this.context);
     b2.x = 200;
@@ -125,16 +186,6 @@ export class Engine {
     b2.ident = "b2";
     b2.bounce = true;
 
-    /*var b3 = new Bola(this.context);
-    b3.x = 50;
-    b3.y = 300;
-    b3.velocidadeX = 0;
-    b3.velocidadeY = 5;
-    b3.cor = "green";
-    b3.raio = 10;
-    b3.ident = "b3";
-    b3.bounce = true;*/
-
     var expld = new Explode(this.context);
     var imagemExpl = new Image();
     imagemExpl.src = "engine/images/heal01.png";
@@ -145,26 +196,12 @@ export class Engine {
 
     // Criando o loop de animação
 
-    //this.animacao.novoSprite(b1);
     this.animacao.novoSprite(b2);
-    //this.animacao.novoSprite(b3);
-    //this.animacao.novoSprite(expld);
-
-    //this.colisor.novoSprite(b1);
     this.colisor.novoSprite(b2);
-    //this.colisor.novoSprite(b3);
-
     this.animacao.colisor = this.colisor;
 
-    //b1.animacao = this.animacao;
     b2.animacao = this.animacao;
-    //b3.animacao = this.animacao;
-    // --- //
-    //b1.colisor = this.colisor;
     b2.colisor = this.colisor;
-    //b3.colisor = this.colisor;
-
-    //animacao.ligar();
 
     /* Movimentando personagem */
 
@@ -214,7 +251,10 @@ export class Engine {
 
     $("#particle_input input").click(function() {
       currentType = $(this).val();
-      //personagem.sheet.update_img(img);
+    });
+
+    $("#particle_form input").click(function() {
+      currentForm = $(this).val();
     });
 
   }
