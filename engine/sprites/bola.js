@@ -9,6 +9,7 @@ export function Bola(context, efeito) {
   this.time = 100;
   this.timer = this.time;
   this.reduce = false;
+  this.in = false;
 
   // Atributos de desenho padrão
   this.cor = "black";
@@ -21,8 +22,8 @@ export function Bola(context, efeito) {
 Bola.prototype = {
   changeSpeed: function(speed) {
     if (this.reduce) {
-      var mult = 1 - ((this.timer * 100) / this.time) * 0.01;
-      speed *= mult;
+      var mult = ((this.timer * 100) / this.time) * 0.01;
+      speed *= this.in ? mult : 1 - mult;
       this.timer--;
 
       if (this.timer == 0) {
@@ -61,15 +62,33 @@ Bola.prototype = {
           this.colisor.sprites.splice(i, 1);
         }
       }
-    } else if (this.bounce && !this.reduce) {
+    } else if (this.bounce) {
       if (this.x < this.raio || this.x > ctx.canvas.width - this.raio) {
-        this.velocidadeX *= -1;
+        console.log("Bate");
+        if (this.reduce && this.in) {
+          this.timer = this.time;
+          this.in = false;
+          this.velocidadeX *= -1;
+        }
+      } else if (
+        (this.x < this.raio + 100 && !this.reduce) ||
+        (this.x > ctx.canvas.width - this.raio - 100 && !this.reduce)
+      ) {
         this.reduce = true;
+        this.in = true;
       }
 
       if (this.y < this.raio || this.y > ctx.canvas.height - this.raio) {
         this.velocidadeY *= -1;
         this.reduce = true;
+        this.timer = this.time;
+        this.in = false;
+      } else if (
+        this.y < this.raio + 25 ||
+        this.y > ctx.canvas.height - this.raio - 25
+      ) {
+        this.reduce = true;
+        this.in = true;
       }
     }
 
