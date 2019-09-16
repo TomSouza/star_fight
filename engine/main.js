@@ -15,6 +15,8 @@ export class Engine {
 		this.animacao = new Animate(this.context);
 
 		this.minhasbolas = [];
+
+		currentType = "circulo";
 	}
 
 	createSphere(){
@@ -54,9 +56,10 @@ export class Engine {
 
 		var qtnCircles = 5;
 		for(var loop = 0; loop < qtnCircles; loop++){
+			var timer = 5;
 			for(var i = 0; i < 2 * Math.PI; i += angInc){
 				var bolinhaInSpace = new Bola(this.context);
-			    bolinhaInSpace.lifetime = 101;
+			    bolinhaInSpace.lifetime = 101 + ((timer*2) );
 			    bolinhaInSpace.raio = sphereRadius;
 			    bolinhaInSpace.cor = `rgb(
 			    	${Math.random() * (255 - 0) + 0},
@@ -68,12 +71,47 @@ export class Engine {
 			    
 			    this.animacao.novoSprite(bolinhaInSpace);
 			    sphereRadius += 0.05;
+			    timer += 5;
 			    
 			}
 			spiralRadius += 20;
 		}
-		
 	}
+
+	createSnow(){
+		var rect = this.canvas.getBoundingClientRect();
+		       
+		var center_X = event.clientX - rect.left;
+		var center_Y = event.clientY - rect.top;
+
+		var spiralRadius = 0;
+		var sphereRadius = 2.5;
+		var angInc = 2*Math.PI/20;
+
+		var timer = 5;
+		for(var i = 0; i < 2 * Math.PI; i += angInc){
+			var bolinhaInSpace = new Bola(this.context);
+		    bolinhaInSpace.lifetime = 101 + ((timer*2) );
+		    bolinhaInSpace.raio = sphereRadius;
+		    bolinhaInSpace.cor = `rgb(
+		    	${Math.random() * (255 - 0) + 0},
+		        ${Math.random() * (255 - 0) + 0},
+		        0
+		    )`;
+		    bolinhaInSpace.x = center_X + (spiralRadius * Math.cos( i ));
+		    bolinhaInSpace.y = center_Y + (spiralRadius * Math.sin( i ));
+		    
+		    bolinhaInSpace.velocidadeX = (bolinhaInSpace.x/100);
+		    bolinhaInSpace.velocidadeY = (bolinhaInSpace.y/100);
+
+		    this.animacao.novoSprite(bolinhaInSpace);
+		    sphereRadius += 0;
+		    timer += 5;
+		    
+		}
+	}
+
+	
 
   run() {
     
@@ -107,10 +145,13 @@ export class Engine {
     }
 
     this.canvas.onclick = (event) => {
+    	console.log(currentType);
     	if(currentType == "circulo")
     		this.createSphere();
     	if(currentType == "espiral")
     		this.createSpiral();
+    	if(currentType == "neve")
+    		this.createSnow();
     }
 
     
