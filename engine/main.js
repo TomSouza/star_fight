@@ -10,171 +10,160 @@ var currentType;
 var currentForm;
 
 export class Engine {
-	constructor(_element, _context) {
-		this.canvas = document.getElementById(_element);
-		this.context = this.canvas.getContext(_context);
-		this.colisor = new Colisor();
-		this.animacao = new Animate(this.context);
+  constructor(_element, _context) {
+    this.canvas = document.getElementById(_element);
+    this.context = this.canvas.getContext(_context);
+    this.colisor = new Colisor();
+    this.animacao = new Animate(this.context);
 
-		this.minhasbolas = [];
+    this.minhasbolas = [];
 
-		currentType = "circulo";
-		currentForm = "esfera";
-	}
+    currentType = "circulo";
+    currentForm = "esfera";
+  }
 
-	drawCircle(raio){
-		var form = new Bola(this.context);
-		form.lifetime = 101;
-		form.raio = raio;
-		form.cor = `rgb(
+  drawCircle(raio) {
+    var form = new Bola(this.context);
+    form.lifetime = 101;
+    form.raio = raio;
+    form.cor = `rgb(
+		   	${Math.random() * (255 - 0) + 0},
+			  ${Math.random() * (255 - 0) + 0},
+		    0
+		)`;
+    return form;
+  }
+
+  drawSquare(altura, largura) {
+    var form = new Quadrado(this.context);
+    form.lifetime = 101;
+    form.altura = altura;
+    form.largura = largura;
+    form.cor = `rgb(
 		   	${Math.random() * (255 - 0) + 0},
 			${Math.random() * (255 - 0) + 0},
 		    0
 		)`;
-		return form;
-	}
+    return form;
+  }
 
-	drawSquare(altura, largura){
-		var form = new Quadrado(this.context);
-		form.lifetime = 101;
-		form.altura = altura;
-		form.largura = largura;
-		form.cor = `rgb(
-		   	${Math.random() * (255 - 0) + 0},
-			${Math.random() * (255 - 0) + 0},
-		    0
-		)`;
-		return form;
-	}
+  createSphere() {
+    var rect = this.canvas.getBoundingClientRect();
 
-	createSphere(){
-		var rect = this.canvas.getBoundingClientRect();
-		       
-		var center_X = event.clientX - rect.left;
-		var center_Y = event.clientY - rect.top;
+    var center_X = event.clientX - rect.left;
+    var center_Y = event.clientY - rect.top;
 
-		var radius = 20;
+    var radius = 20;
 
-		var angInc = 2 * Math.PI/20;
+    var angInc = (2 * Math.PI) / 20;
 
-		var formInSpace;
+    var formInSpace;
 
-		for(var i = 0; i < 2 * Math.PI; i += angInc){
-			if( currentForm == "esfera")
-				formInSpace = this.drawCircle(5);
-			else
-				formInSpace = this.drawSquare(5,5);
-		    formInSpace.x = center_X + (radius * Math.cos( i ));
-		    formInSpace.y = center_Y + (radius * Math.sin( i ));
-		    this.animacao.novoSprite(formInSpace);
-		}
-	}
+    for (var i = 0; i < 2 * Math.PI; i += angInc) {
+      if (currentForm == "esfera") formInSpace = this.drawCircle(5);
+      else formInSpace = this.drawSquare(5, 5);
+      formInSpace.x = center_X + radius * Math.cos(i);
+      formInSpace.y = center_Y + radius * Math.sin(i);
+      this.animacao.novoSprite(formInSpace);
+    }
+  }
 
-	createSpiral(){
-		var rect = this.canvas.getBoundingClientRect();
-		       
-		var center_X = event.clientX - rect.left;
-		var center_Y = event.clientY - rect.top;
+  createSpiral() {
+    var rect = this.canvas.getBoundingClientRect();
 
-		var spiralRadius = 0;
-		var sphereRadius = 0.5;
-		var sqrWidth = 0.5;
-		var sqrHeight = 0.5;
+    var center_X = event.clientX - rect.left;
+    var center_Y = event.clientY - rect.top;
 
-		var angInc = 2 * Math.PI/20;
+    var spiralRadius = 0;
+    var sphereRadius = 1;
+    var sqrWidth = 0.5;
+    var sqrHeight = 0.5;
 
-		var qtnCircles = 5;
-		var formInSpace;
-		
-		for(var loop = 0; loop < qtnCircles; loop++){
-			var timer = 5;
-			for(var i = 0; i < 2 * Math.PI; i += angInc){
-				if( currentForm == "esfera")
-					formInSpace = this.drawCircle(sphereRadius);
-				else
-					formInSpace = this.drawSquare(sqrWidth,sqrHeight);
-			    formInSpace.lifetime = 101 + ((timer*2) );
-			    
-			    formInSpace.x = center_X + (spiralRadius * Math.cos( i ));
-			    formInSpace.y = center_Y + (spiralRadius * Math.sin( i ));
-			    
-			    this.animacao.novoSprite(formInSpace);
-			    if( currentForm == "esfera")
-					sphereRadius += 0.25;
-				else{
-					sqrHeight += 0.5;
-					sqrWidth += 0.5;
-				}
-					
-			    timer += 5;
-				
-			}
-			spiralRadius += 20;
-		}
-	}
+    var angInc = (2 * Math.PI) / 20;
 
-	createSnow(){
-		var rect = this.canvas.getBoundingClientRect();
-		       
-		var center_X = event.clientX - rect.left;
-		var center_Y = event.clientY - rect.top;
+    var qtnCircles = 4;
+    var formInSpace;
 
-		var spiralRadius = 0;
-		var sphereRadius = 5;
-		var sqrWidth = 5;
-		var sqrHeight = 5;
+    var timer = 5;
 
-		var angInc = 2*Math.PI/20;
+    for (var loop = 0; loop < qtnCircles; loop++) {
+      for (var i = 0; i < 2 * Math.PI; i += angInc) {
+        if (currentForm == "esfera") {
+          formInSpace = this.drawCircle(sphereRadius);
+        } else {
+          formInSpace = this.drawSquare(sqrWidth, sqrHeight);
+        }
 
-		var timer = 5;
+        formInSpace.lifetime = 50 + timer;
 
-		var formInSpace;
-		if( currentForm == "esfera")
-			formInSpace = this.drawCircle(sphereRadius);
-		else
-			formInSpace = this.drawSquare(sqrWidth, sqrHeight);
-		formInSpace.lifetime = 101 + ((timer*2) );
-		
-		formInSpace.x = center_X ;
-		formInSpace.y = center_Y;
-		    
-		formInSpace.velocidadeX = (formInSpace.x/100);
-		formInSpace.velocidadeY = (formInSpace.y/100);
+        formInSpace.x = center_X + spiralRadius * Math.cos(i);
+        formInSpace.y = center_Y + spiralRadius * Math.sin(i);
 
-		this.animacao.novoSprite(formInSpace);
-		
-	}
+        this.animacao.novoSprite(formInSpace);
+        if (currentForm == "esfera") {
+          sphereRadius += 0.05;
+        } else {
+          sqrHeight += 0.5;
+          sqrWidth += 0.5;
+        }
 
-	
+        timer += 2;
+        spiralRadius += 1;
+      }
+    }
+  }
+
+  createSnow() {
+    var rect = this.canvas.getBoundingClientRect();
+
+    var center_X = event.clientX - rect.left;
+    var center_Y = event.clientY - rect.top;
+
+    var spiralRadius = 0;
+    var sphereRadius = 5;
+    var sqrWidth = 5;
+    var sqrHeight = 5;
+
+    var angInc = (2 * Math.PI) / 20;
+
+    var timer = 5;
+
+    var formInSpace;
+    if (currentForm == "esfera") formInSpace = this.drawCircle(sphereRadius);
+    else formInSpace = this.drawSquare(sqrWidth, sqrHeight);
+    formInSpace.lifetime = 101 + timer * 2;
+
+    formInSpace.x = center_X;
+    formInSpace.y = center_Y;
+
+    formInSpace.velocidadeX = formInSpace.x / 100;
+    formInSpace.velocidadeY = formInSpace.y / 100;
+
+    this.animacao.novoSprite(formInSpace);
+  }
 
   run() {
-    
-    
-    this.canvas.onmousemove = (event) => {
-        var rect = this.canvas.getBoundingClientRect();
-        var trail = new Bola(this.context);
-        trail.lifetime = 101;
-        trail.x = event.clientX - rect.left;
-        trail.y = event.clientY - rect.top;
-        trail.cor = `rgb(
+    this.canvas.onmousemove = event => {
+      var rect = this.canvas.getBoundingClientRect();
+      var trail = new Bola(this.context);
+      trail.lifetime = 101;
+      trail.x = event.clientX - rect.left;
+      trail.y = event.clientY - rect.top;
+      trail.cor = `rgb(
             ${Math.random() * (255 - 0) + 0},
             ${Math.random() * (255 - 0) + 0},
             0
         )`;
 
-        if(currentType == "mouseMovement")
- 	       this.animacao.novoSprite(trail);
-    }
+      if (currentType == "mouseMovement") this.animacao.novoSprite(trail);
+    };
 
-    this.canvas.onclick = (event) => {
-    	console.log(currentType);
-    	if(currentType == "circulo")
-    		this.createSphere();
-    	if(currentType == "espiral")
-    		this.createSpiral();
-    	if(currentType == "neve")
-    		this.createSnow();
-    }
+    this.canvas.onclick = event => {
+      console.log(currentType);
+      if (currentType == "circulo") this.createSphere();
+      if (currentType == "espiral") this.createSpiral();
+      if (currentType == "neve") this.createSnow();
+    };
 
     var b2 = new Bola(this.context);
     b2.x = 200;
@@ -256,6 +245,5 @@ export class Engine {
     $("#particle_form input").click(function() {
       currentForm = $(this).val();
     });
-
   }
 }
